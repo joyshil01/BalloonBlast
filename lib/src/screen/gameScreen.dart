@@ -32,7 +32,7 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
 
   int pendingExplosions = 0;
   bool waitingForExplosion = false;
-  bool gameOver = false; // NEW: to track if game ended
+  bool gameOver = false;
 
   Set<int> activePlayers = {};
 
@@ -60,18 +60,21 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
   }
 
   void addBall(int row, int col, [int? forcePlayer]) {
-    if (gameOver) return; // BLOCK moves if game is over
+    if (gameOver) return;
 
     final i = index(row, col);
     final cell = cells[i];
 
-    if (forcePlayer == null && cell.count > 0 && cell.owner != currentPlayer)
+    if (forcePlayer == null && cell.count > 0 && cell.owner != currentPlayer) {
       return;
+    }
 
     final thisPlayer = forcePlayer ?? currentPlayer;
 
     if (forcePlayer == null) {
       activePlayers.add(currentPlayer);
+    } else {
+      activePlayers.add(forcePlayer);
     }
 
     setState(() {
@@ -90,10 +93,12 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
         explode(row, col, thisPlayer);
         pendingExplosions--;
 
-        if (pendingExplosions == 0 && forcePlayer == null) {
+        if (pendingExplosions == 0) {
           waitingForExplosion = false;
-          checkWinner();
-          if (!gameOver) switchPlayer();
+          checkWinner(); // ✅ always check winner after all explosions
+          if (!gameOver && forcePlayer == null) {
+            switchPlayer();
+          }
         }
       });
     } else if (forcePlayer == null && !waitingForExplosion) {
@@ -103,6 +108,8 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
   }
 
   void explode(int row, int col, int player) {
+    if (gameOver) return;
+
     final i = index(row, col);
 
     setState(() {
@@ -130,7 +137,7 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
   void switchPlayer() {
     setState(() {
       currentPlayer = currentPlayer % widget.playerCount + 1;
-      print('player switched to $currentPlayer');
+      print('Player switched to $currentPlayer');
     });
   }
 
@@ -139,7 +146,7 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
     currentPlayer = 1;
     pendingExplosions = 0;
     waitingForExplosion = false;
-    gameOver = false; // Reset gameOver on new game
+    gameOver = false;
     activePlayers.clear();
     setState(() {});
   }
@@ -151,10 +158,10 @@ class _ChainReactionGameState extends State<ChainReactionGame> {
     print('Owners on board: $owners');
 
     if (activePlayers.length > 1 && owners.length == 1 && owners.first != 0) {
-      gameOver = true; // mark game as over
+      gameOver = true;
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        showWinnerDialog(owners.first);
+        if (mounted) showWinnerDialog(owners.first);
       });
     }
   }
