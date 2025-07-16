@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "285727557567",
+    "project_id": "bubble-blast-59992",
+    "storage_bucket": "bubble-blast-59992.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285727557567:android:35d72b60229697d9f3430a",
+        "android_client_info": {
+          "package_name": "com.balloonblastmy.balloonblast"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2YK4kpgnLOxLVYMOEqBnZT1H4j8cpQAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

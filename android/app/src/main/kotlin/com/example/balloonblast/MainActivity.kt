@@ -1,4 +1,4 @@
-package com.example.balloonblast
+package com.balloonblastmy.balloonblast
 
 import io.flutter.embedding.android.FlutterActivity
 
